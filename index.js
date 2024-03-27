@@ -35,14 +35,14 @@ function generateShortLink() {
 app.post("/", async (req, res) => {
   const longUrl = req.body.fullUrlInput;
   try {
-    const checkUrlExists = await db.query(
+    const checkLongUrlExists = await db.query(
       "SELECT short_url FROM urls WHERE long_url = $1",
       [longUrl]
     );
 
     // Check if long URL exists, if it does then return the short URL
-    if (checkUrlExists.rows.length > 0) {
-      const shortUrl = checkUrlExists.rows[0].short_url; //returns short url
+    if (checkLongUrlExists.rows.length > 0) {
+      const shortUrl = checkLongUrlExists.rows[0].short_url; //returns short url
       const fullShortUrl = `http://localhost:3000/${shortUrl}`;
       res.send(
         `URL already exists. Short URL: <a href="${fullShortUrl}">${shortUrl}</a>`
@@ -64,22 +64,25 @@ app.post("/", async (req, res) => {
 });
 
 //Route to handle what happens when the user clicks the short url
-app.get("/", (req, res) => {
-  res.send("yay short url");
+app.get("/:shortUrl", async (req, res) => {
+  const shortUrl = req.params.shortUrl;
+  try {
+    const result = await db.query(
+      "SELECT long_url FROM urls WHERE short_url = $1",
+      [shortUrl]
+    );
+
+    if (result.rows.length > 0) {
+      const longUrl = result.rows[0].long_url;
+      res.redirect(longUrl);
+    } else {
+      res.status(404).send("Short URL not found");
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Error retrieving long URL from database");
+  }
 });
-
-// app.get("/:shortUrl", async (req, res) => {
-//    const shortUrl = req.params.shortUrl;
-//    // Lookup the long URL based on the short URL from the database
-//    const longUrl = await lookupLongUrl(shortUrl); // Implement this function to retrieve the long URL
-
-//    if (longUrl) {
-//        // Redirect the user to the long URL
-//        res.redirect(longUrl);
-//    } else {
-//        res.status(404).send("Short URL not found");
-//    }
-// });
 
 // Starting the server and listening on the specified port
 app.listen(port, () => {
