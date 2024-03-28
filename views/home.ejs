@@ -1,18 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>ShortenURL</title>
-</head>
-<body>
-   <form action="/" method="POST">
-      <div class="form-group">
-        <label for="fullUrlInput">Long URL</label>
-        <input type="url" id="fullURL" name="fullUrlInput">
-      </div>
-      <button type="submit" class="btn btn-dark">Shorten</button>
-    </form>
-   
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShortenURL</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,700&family=Encode+Sans&family=Jost:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@1,200&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <h1>ShortenURL</h1>
+      <h2>
+        Are your URLs stretching too far? Let our website trim them down for
+        you!
+      </h2>
+      <h4>Paste the URL you want to shorten down below!</h4>
+      <form action="/" method="POST">
+        <div class="form-group">
+          <label for="fullUrlInput"></label>
+          <input type="url" id="fullURL" name="fullUrlInput" />
+        </div>
+        <button type="submit" class="shortenButton">Shorten</button>
+      </form>
+    </div>
+  </body>
 </html>

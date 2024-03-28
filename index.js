@@ -44,9 +44,8 @@ app.post("/", async (req, res) => {
     if (checkLongUrlExists.rows.length > 0) {
       const shortUrl = checkLongUrlExists.rows[0].short_url; //returns short url
       const fullShortUrl = `http://localhost:3000/${shortUrl}`;
-      res.send(
-        `URL already exists. Short URL: <a href="${fullShortUrl}">${shortUrl}</a>`
-      );
+      res.render("urlExists.ejs", { fullShortUrl, shortUrl });
+      
     } else {
       // If URL doesn't exist, add it to the database and generate a short URL
       const shortUrl = generateShortLink();
@@ -55,7 +54,7 @@ app.post("/", async (req, res) => {
         shortUrl,
       ]);
       const fullShortUrl = `http://localhost:3000/${shortUrl}`;
-      res.send(`Short URL created: <a href="${fullShortUrl}">${shortUrl}</a>`);
+      res.render("createNewUrl.ejs", { fullShortUrl, shortUrl });
     }
   } catch (err) {
     console.log(err);
