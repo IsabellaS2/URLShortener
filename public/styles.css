@@ -1,0 +1,78 @@
+body {
+  font-family: "Space Mono";
+  background-color: #fdaf7b;
+  font-style: normal;
+  line-height: normal;
+  text-align: center;
+}
+
+h1 {
+  color: #824d74;
+  font-size: 72px;
+  font-weight: 700;
+}
+
+h2 {
+  color: #401f71;
+  font-size: 36px;
+  font-weight: 400;
+}
+
+h3 {
+  color: #401f71;
+  font-size: 36px;
+  font-weight: 400;
+}
+
+h4 {
+  color: #401f71;
+  font-size: 24px;
+  font-weight: 400;
+}
+
+a {
+  color: #401f71;
+  font-size: 50px;
+  font-weight: 400;
+  text-decoration-line: underline;
+}
+
+.shortenButton {
+  /* button */
+  border-radius: 26px;
+  background: #be7b72;
+  width: 315px;
+  height: 83px;
+  flex-shrink: 0;
+  border: none;
+  cursor: pointer;
+
+  /* text */
+  color: #401f71;
+  font-family: "Space Mono";
+  font-size: 36px;
+}
+
+/* Hover effect */
+.shortenButton:hover {
+  background-color: #824d74; /* Darker green background color */
+}
+
+label {
+  font-family: "Space Mono";
+  color: #401f71;
+}
+
+.form-group {
+  margin-bottom: 40px;
+}
+
+.form-group input[type="url"] {
+  width: 30%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #be7b72;
+  border-radius: 5px;
+  background: #be7b72;
+  color: #401f71;
+}
