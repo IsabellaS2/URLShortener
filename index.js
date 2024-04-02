@@ -1,10 +1,13 @@
 import express from "express";
+import { body, validationResult } from "express-validator";
 import bodyParser from "body-parser";
 import pg from "pg";
 import env from "dotenv";
 
+env.config();
+
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 
 // Configuring PostgreSQL client
 const db = new pg.Client({
@@ -14,15 +17,10 @@ const db = new pg.Client({
   password: process.env.PG_PASSWORD,
   port: process.env.PG_PORT,
 });
-
 db.connect();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
-
-app.get("/", (req, res) => {
-  res.render("home.ejs");
-});
 
 //Generate Short Link
 function generateShortLink() {
@@ -33,7 +31,22 @@ function generateShortLink() {
   return firstPart + secondPart;
 }
 
-app.post("/", async (req, res) => {
+//Validation Middleware
+const validateInput = [
+  body("fullUrlInput").isURL().withMessage("Invalid URL"),
+];
+
+//Routes
+app.get("/", (req, res) => {
+  res.render("home.ejs");
+});
+
+app.post("/", validateInput, async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.render("emptyPage.ejs");
+  }
+
   const longUrl = req.body.fullUrlInput;
   try {
     const checkLongUrlExists = await db.query(
@@ -45,8 +58,7 @@ app.post("/", async (req, res) => {
     if (checkLongUrlExists.rows.length > 0) {
       const shortUrl = checkLongUrlExists.rows[0].short_url; //returns short url
       const fullShortUrl = `http://localhost:3000/${shortUrl}`;
-      res.render("urlExists.ejs", { fullShortUrl, shortUrl });
-      
+      return res.render("urlExists.ejs", { fullShortUrl, shortUrl });
     } else {
       // If URL doesn't exist, add it to the database and generate a short URL
       const shortUrl = generateShortLink();
@@ -55,13 +67,14 @@ app.post("/", async (req, res) => {
         shortUrl,
       ]);
       const fullShortUrl = `http://localhost:3000/${shortUrl}`;
-      res.render("createNewUrl.ejs", { fullShortUrl, shortUrl });
+      return res.render("createNewUrl.ejs", { fullShortUrl, shortUrl });
     }
   } catch (err) {
     console.log(err);
-    res.status(500).send("Error retrieving long URL from database");
+    return res.status(500).send("Error retrieving long URL from database");
   }
 });
+
 
 //Route to handle what happens when the user clicks the short url
 app.get("/:shortUrl", async (req, res) => {
@@ -86,5 +99,5 @@ app.get("/:shortUrl", async (req, res) => {
 
 // Starting the server and listening on the specified port
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+  console.log(`Server running on port ${process.env.PORT}`);
 });
