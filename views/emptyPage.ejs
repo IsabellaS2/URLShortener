@@ -11,8 +11,14 @@
     <div class="message-container">
       <h1>ShortenURL</h1>
       <h2 class="message">Unfortunately, you didn’t enter anything so we can’t shorten it.</h2>
-      <h3 class="message">Navigate back to our home page to try agaim</h3>
-      <a href="/">Home</a>
+      <h3 class="message">Redirecting you back to home...</h3>
     </div>
+
+    <!-- Automatically redirect the user to the home page -->
+    <script>
+      setTimeout(function() {
+          window.location.href = "/";
+      }, 2000); 
+  </script>
 </body>
 </html>
