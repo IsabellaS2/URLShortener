@@ -24,17 +24,13 @@ app.use(express.static("public"));
 
 //Generate Short Link
 function generateShortLink() {
-  var firstPart = (Math.random() * 46656) | 0;
-  var secondPart = (Math.random() * 46656) | 0;
-  firstPart = ("000" + firstPart.toString(36)).slice(-3);
-  secondPart = ("000" + secondPart.toString(36)).slice(-3);
+  const firstPart = Math.random().toString(36).substr(2, 3);
+  const secondPart = Math.random().toString(36).substr(2, 3);
   return firstPart + secondPart;
 }
 
 //Validation Middleware
-const validateInput = [
-  body("fullUrlInput").isURL().withMessage("Invalid URL"),
-];
+const validateInput = [body("fullUrlInput").isURL().withMessage("Invalid URL")];
 
 //Routes
 app.get("/", (req, res) => {
@@ -75,7 +71,6 @@ app.post("/", validateInput, async (req, res) => {
   }
 });
 
-
 //Route to handle what happens when the user clicks the short url
 app.get("/:shortUrl", async (req, res) => {
   const shortUrl = req.params.shortUrl;
@@ -84,12 +79,11 @@ app.get("/:shortUrl", async (req, res) => {
       "SELECT long_url FROM urls WHERE short_url = $1",
       [shortUrl]
     );
-
     if (result.rows.length > 0) {
       const longUrl = result.rows[0].long_url;
       res.redirect(longUrl);
     } else {
-      res.status(404).send("Short URL not found");
+      res.status(404).render("emptyPage.ejs");
     }
   } catch (err) {
     console.log(err);
