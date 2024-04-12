@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Isabella Sulisufi <isabella.sulisufi@clearscore.com>",
+  "author": "Isabella Sulisufi <i.sulisufi@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "body-parser": "1.20.2",
